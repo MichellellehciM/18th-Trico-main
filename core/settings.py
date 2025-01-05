@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_fsm",
+    "django_htmx",
     "users",
     "pages",
     "order",
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
     "search",
     "notification",
     "taggit",
+    "rtchat",
+
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
