@@ -11,16 +11,20 @@
     <link rel="icon" type="image/x-icon" href="{% static "favicon.ico" %}" />
 
     <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer ></script>
     <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
     <script src="https://unpkg.com/htmx-ext-ws"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.13" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+
+
+    {% comment %} <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
     <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.2"></script> {% endcomment %}
 
-    <script src="https://unpkg.com/hyperscript.org@0.9.13"></script>
     {% django_htmx_script %}
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/tailwindcss">
