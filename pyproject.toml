@@ -26,6 +26,7 @@ django-taggit = "^6.1.0"
 django-cleanup = "^9.0.0"
 django-htmx = "^1.21.0"
 channels = {extras = ["daphne"], version = "^4.2.0"}
+daphne = "^4.1.2"
 
 
 [build-system]
