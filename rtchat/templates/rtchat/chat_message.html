@@ -14,7 +14,7 @@
     <div class="flex justify-start">
         <div class="flex items-end mr-2" >
             <a href="">
-                <img class="w-8 h-8 rounded-full object-cover" src="{{users.profile.avatar}}">
+                <img class="w-8 h-8 rounded-full object-cover" src="{% if user.profile.photo %}{{ user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}">
             </a>
         </div>
         <div class="flex items-end" >
