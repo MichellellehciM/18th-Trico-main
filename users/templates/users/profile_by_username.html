@@ -1,0 +1,21 @@
+{% extends "shared/layout.html" %}
+
+{% block content %}
+<div class="profile-container bg-#213052shadow-lg rounded-lg p-6 max-w-lg mx-auto">
+    {% if user.profile.photo %}
+    <div class="flex justify-center mb-4">
+        <img src="{{ user.profile.photo.url }}" alt="{{ user.username }}" 
+            class="w-60 h-60 rounded-full border-4 border-blue-300 object-cover" />
+    </div>
+    {% else %}
+    <div class="flex justify-center mb-4">
+        <img src="/static/default-avatar.png" alt="Default Avatar" 
+            class="w-32 h-32 rounded-full border-4 border-gray-300 object-cover" />
+    </div>
+    {% endif %}
+    <p class="text-gray-400 text-center">{{ user.profile.bio }}</p>
+    <h1 class="text-2xl font-bold  text-gray-100 mb-4">{{ user.username }} 的個人頁面</h1>
+
+</div>
+
+{% endblock %}
