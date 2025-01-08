@@ -29,6 +29,7 @@ channels = {extras = ["daphne"], version = "^4.2.0"}
 daphne = "^4.1.2"
 redis = "^5.2.1"
 channels-redis = "^4.2.1"
+shortuuid = "^1.0.13"
 
 
 [build-system]
