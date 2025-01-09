@@ -27,7 +27,7 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
     path("profile/", profile, name="profile"),
-    path("information/", information, name="information"),
+    path("information/<str:username>/", information, name="information"),
 
     path("password_reset/", CustomPasswordResetView.as_view(), name="password_reset"),
     path(

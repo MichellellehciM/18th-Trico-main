@@ -7,7 +7,8 @@
         <!-- 聊天窗口頂部 -->
         <div class="flex justify-center text-emerald-400 bg-gray-800 p-2 sticky top-0 z-10">
             {% if other_user %}
-            <a href=" ">
+            <div id="online-icon" class="gray-dot absolute top-2 left-2"></div>
+            <a href="google.com">
                 <div class="flex items-center gap-2 p-4 sticky top-0 z-10">
                     <img class="w-10 h-10 rounded-full object-cover" 
                     src="{{ other_user.profile.photo.url|default:'/static/default-avatar.png' }}"
@@ -15,7 +16,14 @@
                     <div>
                         <span class="font-bold text-white">{{ other_user.username }}</span>
                         {% if other_user.profile.displayname %}
-                        <span class="text-sm font-light text-gray-400">@{{ other_user.profile.displayname }}</span>
+                        <span clas="text-gray-400">
+                            @
+                            {% if other_user.profile.displayname  %}
+                                {{ message.author.profile.displayname }}
+                            {% else %}
+                                {{ other_user.username }}
+                            {% endif %}
+                        </span>
                         {% endif %}
                     </div>
                 </div>
