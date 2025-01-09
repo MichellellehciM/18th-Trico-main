@@ -11,8 +11,7 @@
             <img
                 class="w-10 h-10 rounded-full object-cover"
                 src="{{ other_user.profile.photo.url|default:'/static/default-avatar.png' }}"
-                alt="{{ other_user.username }}"
-            />
+                alt="{{ other_user.username }}"/>
             <div>
                 <span class="font-bold text-white">{{ other_user.username }}</span>
                 {% if other_user.profile.displayname %}
