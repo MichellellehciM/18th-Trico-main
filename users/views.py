@@ -312,6 +312,17 @@ def purchased_services(request):
     )
 
 # 個人首頁
-def profile_by_username(request, username):
+def information(request, username):
     user = get_object_or_404(User, username=username)  
-    return render(request, "users/profile_by_username.html", {"user": user})
+    return render(request, "users/information.html", {"user": user})
+
+
+def profile_view(request, username=None):
+    if username:
+        profile = get_object_or_404(User, username=username).profile
+    else:
+        try:
+            profile = request.user.profile
+        except:
+            return redirect_to_login(request.get_full_path())
+    return render(request, 'a_users/profile.html', {'profile':profile})

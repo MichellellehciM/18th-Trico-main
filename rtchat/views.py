@@ -40,7 +40,7 @@ def chat_view(request, chatroom_name='public-chat'):
                 'message' : message,
                 'user' : request.user
             }
-            return render(request, 'a_rtchat/partials/chat_message_p.html', context)
+            return render(request, 'rtchat/partials/chat_message_p.html', context)
     
     context = {
         'chat_messages' : chat_messages, 
@@ -50,12 +50,12 @@ def chat_view(request, chatroom_name='public-chat'):
         'chat_group' : chat_group
     }
     
-    return render(request, 'a_rtchat/chat.html', context)
+    return render(request, 'rtchat/chat.html', context)
 
 @login_required
 def get_or_create_chatroom(request, username):
     if request.user.username == username:
-        return redirect('users:profile_by_username')
+        return redirect('users:information')
     
     other_user = User.objects.get(username = username)
     my_chatrooms = request.user.chat_groups.filter(is_private=True)
@@ -92,7 +92,7 @@ def get_or_create_chatroom(request, username):
 #     context = {
 #         'form': form
 #     }
-#     return render(request, 'a_rtchat/create_groupchat.html', context)
+#     return render(request, 'rtchat/create_groupchat.html', context)
 
 
 # @login_required
@@ -119,7 +119,7 @@ def get_or_create_chatroom(request, username):
 #         'form' : form,
 #         'chat_group' : chat_group
 #     }   
-#     return render(request, 'a_rtchat/chatroom_edit.html', context) 
+#     return render(request, 'rtchat/chatroom_edit.html', context) 
 
 
 # @login_required
@@ -133,7 +133,7 @@ def get_or_create_chatroom(request, username):
 #         messages.success(request, 'Chatroom deleted')
 #         return redirect('home')
     
-#     return render(request, 'a_rtchat/chatroom_delete.html', {'chat_group':chat_group})
+#     return render(request, 'rtchat/chatroom_delete.html', {'chat_group':chat_group})
 
 
 # @login_required
