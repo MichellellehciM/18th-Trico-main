@@ -16,7 +16,8 @@ from .views import (
     freelancer_financial,
     likes_view,
     purchased_services,
-    profile_by_username
+    profile_by_username,
+    information,
 )
 
 app_name = "users"
@@ -26,7 +27,7 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
     path("profile/", profile, name="profile"),
-    path("profile/user/<str:username>/", profile_by_username, name="profile_by_username"),
+    path("information/", information, name="information"),
 
     path("password_reset/", CustomPasswordResetView.as_view(), name="password_reset"),
     path(
