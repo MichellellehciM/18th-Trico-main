@@ -1,43 +1,46 @@
 {% extends 'layouts/blank.html' %}
 
 {% block content %}
+<div class="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
+    <!-- 使用者頭像 -->
+    <div class="w-1/3 h-auto mb-6">
+        <img src="{{ user.profile.photo.url|default:'/static/default-avatar.png' }}" 
+            alt="{{ user.username }}" 
+            class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+    </div>
 
-<div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
-    <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.photo }}" />
+    <!-- 使用者名稱 -->
     <div class="text-center">
-        <h1>{{ user.profile.name }}</h1>
-        <div class="text-gray-400 mb-2 -mt-3">@{{ profile.user.username }}</div>
-        {% if profile.info %}
-        <div class="mt-8 hyphens-auto">{{ profile.info|linebreaksbr }}</div>
-        {% endif %}  
+        <h1 class="text-2xl font-bold text-gray-100 mb-1">
+            {% if user.profile.displayname %}
+                @{{ user.profile.displayname }}
+            {% else %}
+                <span class="text-red-500">尚未填寫匿稱</span>
+            {% endif %}
+        </h1>
+        <div class="text-2xl font-bold text-gray-100 mb-1">{{ user.username }}</div>
+
+        <!-- 顯示個人資訊 -->
+        {% if user.profile.bio %}
+            <div class="text-gray-300 mt-4 px-4 py-2 bg-gray-800 rounded-lg shadow-lg">
+                {{ user.profile.bio|linebreaksbr }}
+            </div>
+        {% else %}
+            <div class="text-red-500 mt-4">尚未填寫個人簡介</div>
+        {% endif %}
+
+        <!-- 聊天按鈕 -->
         {% if profile.user != user %} 
-        <a href="{% url "start-chat" profile.user.username %}">和我聊聊~</a>
+        <div class="mt-6">
+            <a href="{% url 'start-chat' user.username %}" class="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 7.5l-5.34-2.67a2.25 2.25 0 00-2.01 0L9.06 7.5m7.69-3.86a6.75 6.75 0 10-6.5 11.8v2.31a.75.75 0 001.24.58l3.5-2.8a.75.75 0 01.95-.02l3.5 2.8a.75.75 0 001.24-.58v-2.31a6.751 6.751 0 00.12-10.8z" />
+                </svg>
+                和我聊聊~
+            </a>
+        </div>
         {% endif %}
     </div>
 </div>
 
 {% endblock %}
-
-{% comment %} 
-<!-- old -->
-{% extends "shared/layout.html" %}
-
-{% block content %}
-<div class="profile-container bg-#213052shadow-lg rounded-lg p-6 max-w-lg mx-auto">
-    {% if user.profile.photo %}
-    <div class="flex justify-center mb-4">
-        <img src="{{ user.profile.photo.url }}" alt="{{ user.username }}" 
-            class="w-60 h-60 rounded-full border-4 border-blue-300 object-cover" />
-    </div>
-    {% else %}
-    <div class="flex justify-center mb-4">
-        <img src="/static/default-avatar.png" alt="Default Avatar" 
-            class="w-32 h-32 rounded-full border-4 border-gray-300 object-cover" />
-    </div>
-    {% endif %}
-    <p class="text-gray-400 text-center">{{ user.profile.bio }}</p>
-    <h1 class="text-2xl font-bold  text-gray-100 mb-4">{{ user.username }} 的個人頁面</h1>
-
-</div>
-
-{% endblock %} {% endcomment %}

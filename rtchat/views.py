@@ -5,6 +5,8 @@ from .models import ChatGroup
 from .forms import ChatmessageCreateForm
 import uuid  
 from django.contrib.auth.models import User
+from urllib.parse import unquote
+
 
 @login_required
 def chat_view(request, chatroom_name='public-chat'):
@@ -38,7 +40,7 @@ def chat_view(request, chatroom_name='public-chat'):
             message.save()
             context = {
                 'message' : message,
-                'user' : request.user
+                'user' : request.user,
             }
             return render(request, 'rtchat/partials/chat_message_p.html', context)
     
@@ -52,8 +54,31 @@ def chat_view(request, chatroom_name='public-chat'):
     
     return render(request, 'rtchat/chat.html', context)
 
+
+
+# @login_required
+# def get_or_create_chatroom(request, username):
+#     if request.user.username == username:
+#         return redirect('users:information')  # 無法與自己建立聊天室
+    
+#     other_user = get_object_or_404(User, username=username)  # 確保其他用戶存在
+    
+#     # 嘗試獲取已有聊天室，或創建新聊天室
+#     chatroom, created = ChatGroup.objects.get_or_create(
+#         is_private=True,
+#         defaults={"group_name": uuid.uuid4().hex}  # 唯一名稱
+#     )
+    
+#     # 確保聊天室成員包含當前用戶和目標用戶
+#     chatroom.members.add(request.user, other_user)
+
+#     return redirect('chatroom', chatroom.group_name)
+
 @login_required
 def get_or_create_chatroom(request, username):
+    username = unquote(username)
+    other_user = get_object_or_404(User, username=username)
+
     if request.user.username == username:
         return redirect('users:information')
     

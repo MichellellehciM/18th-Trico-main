@@ -117,7 +117,13 @@
             {% for member in chatroom.members.all %}
               {% if member != user %}
                 <li>
+ 
+
                   <a href="{% url 'chatroom' chatroom.group_name %}">
+                    <div class="flex items-center gap-2 p-4 sticky top-0 z-10">
+                      <img class="w-1 h-1 rounded-full object-cover" 
+                      src="{{ other_user.profile.photo.url|default:'/static/default-avatar.png' }}"/>
+                    <div>
                     {{ member.username }}
                   </a>
                 </li>
