@@ -74,13 +74,14 @@
                         {% endif %}
                     </button>
                 </div>
-          <a href="">
+          <a href="{% url 'users:information' service.freelancer_user.username %}">
             <img
-              src="{% if service.freelancer_user.profile.photo %}{{ service.freelancer_user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}"
-              alt="User Avatar"
-              class="w-16 h-16 rounded-full mr-4 border-2 border-gray-300 shadow-sm transition-transform duration-300 hover:scale-125 hover:rotate-6"
+                src="{% if service.freelancer_user.profile.photo %}{{ service.freelancer_user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}"
+                alt="User Avatar"
+                class="w-16 h-16 rounded-full mr-4 border-2 border-gray-300 shadow-sm transition-transform duration-300 hover:scale-125 hover:rotate-6"
             />
           </a>
+        
           <div>
             <p class="text-xl font-bold text-gray-800">{{ service.freelancer_user.username }}</p>
             <!-- 聊天按鈕 -->
