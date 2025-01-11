@@ -13,7 +13,6 @@ class Profile(WebPImageModelMixin,models.Model):
     is_client = models.BooleanField(default=True, null=True)
     is_freelancer = models.BooleanField(default=False, null=True)
     freelancer_verified = models.BooleanField(default=False, null=True)
-    displayname = models.CharField(max_length=20, null=True, blank=True)
 
 
     def __str__(self):

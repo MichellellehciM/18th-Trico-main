@@ -1,23 +1,24 @@
 {% extends 'layouts/blank.html' %}
-
+{% load static %}
 {% block content %}
 <div class="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
     <!-- 使用者頭像 -->
     <div class="w-1/3 h-auto mb-6">
-        <img src="{{ user.profile.photo.url|default:'/static/default-avatar.png' }}" 
-            alt="{{ user.username }}" 
-            class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+        {% if user.profile.photo %}
+            <img src="{{ user.profile.photo.url }}" 
+                alt="{{ user.username }}" 
+                class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+        {% else %}
+            <img src="https://www.shutterstock.com/image-vector/profile-default-avatar-icon-user-600nw-2463844171.jpg" 
+                alt="{{ user.username }}" 
+                class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+        {% endif %}
     </div>
+    
 
     <!-- 使用者名稱 -->
     <div class="text-center">
-        <h1 class="text-2xl font-bold text-gray-100 mb-1">
-            {% if user.profile.displayname %}
-                @{{ user.profile.displayname }}
-            {% else %}
-                <span class="text-red-500">尚未填寫匿稱</span>
-            {% endif %}
-        </h1>
+
         <div class="text-2xl font-bold text-gray-100 mb-1">{{ user.username }}</div>
 
         <!-- 顯示個人資訊 -->
