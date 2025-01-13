@@ -28,7 +28,7 @@
     <!-- 最新服務 -->
     <div class="p-4">
       <div class="flex items-center mb-3">
-        <img class="avatarInpage w-7 h-7 rounded-full border border-gray-300 shadow-sm transition duration-300 hover:scale-110" src="{% if service.freelancer_user.profile.photo %}{{ service.freelancer_user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}" alt="User Avatar "/>
+        <img class="avatarInpage w-7 h-7 rounded-full border border-gray-300 shadow-sm transition duration-300 hover:scale-110" src="{% if service.freelancer_user.profile.photo %}{{ service.freelancer_user.profile.photo.url }}{% else %}https://www.shutterstock.com/image-vector/profile-default-avatar-icon-user-600nw-2463844171.jpg {% endif %}" alt="User Avatar "/>
         <p class="ml-3 text-sm font-semibold text-gray-700">{{ service.freelancer_user.username }}</p>
       </div>
       <p class="text-gray-800 font-medium truncate" title="{{ service.title }}">{{ service.title }}</p>
