@@ -78,8 +78,8 @@
         </div>
       </div>
     </div>
+
     <!--聊天-->
-    
     <div class="dropdown dropdown-end">
       <!-- 圖標按鈕 -->
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -103,26 +103,17 @@
       </div>
     
       <!-- 下拉選單 -->
-       
       <ul
         tabindex="0"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
       >
+      {% load custom_tags %}
 
-        <!-- 私人聊天室列表 -->
-        {% for chatroom in user.chat_groups.all %}
-          {% if chatroom.is_private %}
-            {% for member in chatroom.members.all %}
-              {% if member != user %}
-                <li>
-                  <a href="{% url 'chatroom' chatroom.group_name %}">
-                    {{ member.username }}
-                  </a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
+      <!-- 私人聊天室：顯示不重複對象 -->
+      {% unique_chat_partners user as chat_list %}
+      {% for group_name, username in chat_list %}
+        <li><a href="{% url 'chatroom' group_name %}">{{ username }}</a></li>
+      {% endfor %}
       </ul>
     </div>
     

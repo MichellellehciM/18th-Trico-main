@@ -16,7 +16,6 @@ from .views import (
     freelancer_financial,
     likes_view,
     purchased_services,
-    profile_by_username,
     information,
 )
 from django.urls import path, re_path
