@@ -15,6 +15,7 @@ from .views import (
     mark_as_read_and_redirect,
     freelancer_financial,
     likes_view,
+    purchased_services,
 )
 
 app_name = "users"
@@ -51,4 +52,5 @@ urlpatterns = [
     ),
     path("freelancer_financial/", freelancer_financial, name="freelancer_financial"),
     path("likes/", likes_view, name="likes"),
+    path("purchased_services/", purchased_services, name="purchased_services"),
 ]
