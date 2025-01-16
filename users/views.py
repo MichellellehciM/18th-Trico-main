@@ -315,6 +315,7 @@ def purchased_services(request):
     user = request.user
     orders = Order.objects.filter(client_user=user).order_by("-order_date")
     status = request.GET.get("status")
+    
     if status:
         orders = orders.filter(status=status)
     return render(
