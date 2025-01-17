@@ -2,12 +2,12 @@
 <!-- prettier-ignore -->
 <div class="grid grid-cols-1 sm:grid-cols-4 max-w-6xl mx-auto flex h-[70vh] sm:h-[80vh] sm:gap-4 p-4 gap-y-4">
   <!-- 左側導航欄 -->
-  <aside class="flex flex-col w-full sm:w-64 overflow-hidden bg-emerald-50 border border-1 rounded-lg hover:shadow-md">
+  <aside class="flex flex-col w-full overflow-hidden border rounded-lg sm:w-64 bg-emerald-50 border-1 hover:shadow-md">
     <div class="p-4 text-white bg-emerald-400"><h1 class="text-lg font-bold">業者主控台</h1></div>
     <nav class="grow-0 sm:grow">
-      <ul class="p-4 menu text-base-content grid grid-cols-3 sm:grid-cols-none sm:block gap-2">
+      <ul class="grid grid-cols-3 gap-2 p-4 menu text-base-content sm:grid-cols-none sm:block">
         <li><a href="{% url 'users:profile' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500" >更新個人資料</a></li>
-        <li><a href="#" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">發包進度</a></li>
+        <li><a href="{% url 'users:purchased_services' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">購買服務</a></li>
         <li><a href="{% url 'users:feedback' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">評價與回饋</a></li>
         <li><a href="{% url 'users:likes' %}" class="rounded-lg hover:bg-emerald-200 hover:text-gray-500">愛心收藏</a>
       </li>
@@ -27,10 +27,10 @@
   </aside>
 
   <!-- 主內容區域 -->
-  <main class="col-span-3 flex-grow p-6 bg-white border border-1 rounded-lg hover:shadow-md">
+  <main class="flex-grow col-span-3 p-6 bg-white border rounded-lg border-1 hover:shadow-md">
     <h2 class="pb-2 mb-6 text-xl font-bold text-gray-800 border-b">個人資料</h2>
     <div class="space-y-4">
-      <div class="bg-emerald-50 rounded-lg shadow-md card">
+      <div class="rounded-lg shadow-md bg-emerald-50 card">
         <div class="p-4 card-body">
           <h3 class="text-lg font-semibold text-gray-700 card-title">我的資料</h3>
           <p class="text-sm text-gray-600">
