@@ -2,13 +2,20 @@ from django.db.models import Avg
 from django.shortcuts import render
 from services.models import Service, Like, Category
 from notification.models import Notification
+from django.core.paginator import Paginator
 
 
 def home(request):
     categories = Category.objects.prefetch_related("services")
     services = Service.objects.order_by("-created_at").annotate(
         average_rating=Avg("comments__rating")
-    )[:12]
+    )
+
+    paginator = Paginator(services, 12)  # 每頁顯示 12 個服務
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    placeholders = max(0, 12 - services.count())
 
     # 判斷每個服務是否已被當前用戶點擊愛心
     for service in services:
@@ -19,9 +26,7 @@ def home(request):
         else:
             service.is_liked = False
 
-    placeholders = max(0, 12 - services.count())
-
-    # 未讀通知列表
+    # 傳遞未讀通知列表
     unread_notifications = []
     if request.user.is_authenticated:
         unread_notifications = Notification.objects.filter(
@@ -34,8 +39,9 @@ def home(request):
         {
             "services": services,
             "categories": categories,
+            "page_obj": page_obj,
             "placeholders": range(placeholders),
-            "unread_notifications": unread_notifications,  # 傳遞未讀通知到模板
+            "unread_notifications": unread_notifications,
         },
     )
 
