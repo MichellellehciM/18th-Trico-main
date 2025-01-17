@@ -314,11 +314,15 @@ def freelancer_financial(request):
 @login_required
 def purchased_services(request):
     user = request.user
-    orders = Order.objects.filter(client_user=user).order_by("-order_date")
+    orders_queryset = Order.objects.filter(client_user=user).order_by("-order_date")
 
     status = request.GET.get("status")
     if status:
-        orders = orders.filter(status=status)
+        orders_queryset = orders_queryset.filter(status=status)
+
+    paginator = Paginator(orders_queryset, 10)
+    page_number = request.GET.get("page")
+    orders = paginator.get_page(page_number)
 
     return render(
         request,
