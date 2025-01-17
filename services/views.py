@@ -60,10 +60,12 @@ def create_service(request, id):
 
             tags_input = request.POST.get("tags", "")
             if tags_input:
-                service.tags.set([tag.strip() for tag in tags_input.split(',') if tag.strip()])
+                service.tags.set(
+                    [tag.strip() for tag in tags_input.split(",") if tag.strip()]
+                )
             else:
                 service.tags.clear()
-                        
+
             form.save_m2m()
             return redirect("services:freelancer_dashboard", id=id)
     else:
@@ -98,7 +100,9 @@ def edit_service(request, id, service_id):
 
             tags_input = request.POST.get("tags", "")
             if tags_input:
-                service.tags.set([tag.strip() for tag in tags_input.split(',') if tag.strip()])
+                service.tags.set(
+                    [tag.strip() for tag in tags_input.split(",") if tag.strip()]
+                )
             else:
                 service.tags.clear()
 
@@ -112,8 +116,8 @@ def edit_service(request, id, service_id):
         {
             "form": form,
             "categories": categories,
-            "show_loading": True, # 傳遞顯示 loading 的標記到模板
-            "tags": tags  
+            "show_loading": True,  # 傳遞顯示 loading 的標記到模板
+            "tags": tags,
         },
     )
 
@@ -146,15 +150,15 @@ def error_page(request):
 def service_detail(request, id, service_id):
 
     if not request.user.is_authenticated:
-        return redirect('users:login')  # 重導向到登入頁面
-    
+        return redirect("users:login")  # 重導向到登入頁面
+
     service = get_object_or_404(Service, id=service_id)
 
     tags = service.tags.all()
 
     print("服務ID:", service_id)
-    print("標籤列表:", list(tags)) 
-    
+    print("標籤列表:", list(tags))
+
     comments = Comment.objects.filter(service=service, is_deleted=False).order_by(
         "-created_at"
     )
@@ -257,3 +261,6 @@ def toggle_like(request, service_id):
             )
 
     return JsonResponse({"is_liked": is_liked})
+
+
+

@@ -76,98 +76,100 @@
     {% endfor %}
   </div>
 
-  <!-- 最近新增 -->
+  <!-- 最新服務 -->
   <div class="main overflow-hidden flex flex-col justify-between bg-white">
     <div
       class="visualBox py-6 px-4 my-5 w-full sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1200px] mx-auto bg-gray-100 rounded-lg hover:shadow-lg">
       <div class="flex flex-col items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 text-center">最近新增</h1>
+        <h2 class="text-2xl font-bold text-gray-800 text-center">最新服務</h1>
       </div>
       <div class="services grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {% if services %}
-        {% for service in services %}
-        {% include "pages/service_card.html" %}
+        {% for service in page_obj %}
+          {% include "pages/service_card.html" %}
         {% endfor %}
-        {% else %}
-        <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
+        {% if not page_obj %}
+          <p class="text-center text-gray-500 col-span-full">目前沒有服務資料。</p>
         {% endif %}
-        <!-- 顯示填充卡牌 -->
-        {% for _ in placeholders %}
-        <div class="bg-white p-6 border border-gray-200 transition duration-300">
-          <div class="animate-pulse">
-            <div class="h-40 bg-gray-300 rounded-lg mb-4"></div>
-            <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-            <div class="h-4 bg-gray-300 rounded w-1/2"></div>
-          </div>
-        </div>
-        {% endfor %}
       </div>
     </div>
   </div>
 
 </div>
-<script>
-  document.querySelectorAll("[id^='toggle-like-btn-']").forEach((button) => {
-  button.addEventListener("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
+  <!--按讚收藏js-->
+  <script>
+    document.querySelectorAll("[id^='toggle-like-btn-']").forEach((button) => {
+    button.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-      const serviceId = this.getAttribute("data-service-id");
-      const url = `/services/like/${serviceId}/`;
-      const likeIcons = document.querySelectorAll(`#like-icon-${serviceId}`);
+        const serviceId = this.getAttribute("data-service-id");
+        const url = `/services/like/${serviceId}/`;
+        const likeIcons = document.querySelectorAll(`#like-icon-${serviceId}`);
 
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                },
+              fetch(url, {
+                  method: "POST",
+                  headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",
+                  },
+              })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data?.login_required) {
+                    // 跳轉到登入頁面
+                    window.location.href = "/users/login/";
+                } else {
+                      const newSrc = data?.is_liked ?
+                          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='red' stroke='white' stroke-width='1' viewBox='0 0 24 24'><path d='M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z'/></svg>" :
+                          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='black' fill-opacity='0.4' stroke='white' stroke-width='1' viewBox='0 0 24 24'><path d='M12 20.5C11 20.5 10 19.7294 8.96173 18.9109C6.01943 16.5914 2 14 2 9.1371C2 4.27416 7.50016 0.825464 12 5.50063C16.4998 0.825464 22 4.27416 22 9.1371C22 14 17.9806 16.5914 15.0383 18.9109C14 19.7294 13 20.5 12 20.5Z'/></svg>";
+
+                    likeIcons.forEach((likeIcon) => {
+                        likeIcon.setAttribute("src", newSrc);
+                    });
+                }
             })
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data?.login_required) {
-                  // 跳轉到登入頁面
-                  window.location.href = "/users/login/";
-              } else {
-                    const newSrc = data?.is_liked ?
-                        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='red' stroke='white' stroke-width='1' viewBox='0 0 24 24'><path d='M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z'/></svg>" :
-                        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='black' fill-opacity='0.4' stroke='white' stroke-width='1' viewBox='0 0 24 24'><path d='M12 20.5C11 20.5 10 19.7294 8.96173 18.9109C6.01943 16.5914 2 14 2 9.1371C2 4.27416 7.50016 0.825464 12 5.50063C16.4998 0.825464 22 4.27416 22 9.1371C22 14 17.9806 16.5914 15.0383 18.9109C14 19.7294 13 20.5 12 20.5Z'/></svg>";
-
-                  likeIcons.forEach((likeIcon) => {
-                      likeIcon.setAttribute("src", newSrc);
-                  });
-              }
-          })
-          .catch((error) => console.error("Error:", error));
+            .catch((error) => console.error("Error:", error));
+    });
   });
-});
-</script>
-<!-- 輪播alpinejs組件 -->
-<script>
-  function carousel() {
-    return {
-      currentSlide: 0,
-      totalSlides: 3,
+  </script>
 
-      next() {
-        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
-      },
+  <!-- 分頁按鈕 -->
+  <!-- prettier-ignore -->
+  <div class="pagination flex justify-center items-center space-x-2 mt-6 mb-6">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}" 
+         class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg shadow transition duration-300">上一頁
+      </a>
+    {% else %}
+      <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg shadow cursor-not-allowed">上一頁
+      </span>
+    {% endif %}
+  
+    <div class="flex items-center space-x-1">
+      {% for page_num in page_obj.paginator.page_range %}
+        {% if page_num == page_obj.number %}
+          <span class="px-3 py-2 bg-blue-500 text-white rounded-lg shadow">
+            {{ page_num }}
+          </span>
+        {% elif page_num >= page_obj.number|add:'-2' and page_num <= page_obj.number|add:'2' %}
+          <a href="?page={{ page_num }}" 
+             class="px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg shadow transition duration-300">
+            {{ page_num }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" 
+         class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg shadow transition duration-300">下一頁
+      </a>
+    {% else %}
+      <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg shadow cursor-not-allowed">下一頁</span>
+    {% endif %}
+  </div>
+  
 
-      prev() {
-        this.currentSlide =
-          (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-      },
 
-      startAutoSlide() {
-        setInterval(() => {
-          this.next();
-        }, 2000);
-      },
 
-      init() {
-        this.startAutoSlide();
-      },
-    };
-  }
-</script>
 
 {% endblock %}

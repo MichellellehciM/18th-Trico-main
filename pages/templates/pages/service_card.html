@@ -1,5 +1,5 @@
 <!-- prettier-ignore -->
-<a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}" class="block">
+<a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}" class="block hover:scale-110 transition-transform duration-300 ease-in-out">
   <div class="item overflow-hidden transition-transform duration-300 relative">
     <!-- 圖片 -->
     <img class="w-full h-48 object-cover rounded-lg" src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}" alt="Service Photo" />
@@ -23,27 +23,23 @@
     />
     {% endif %}
   </button>
-</div>
-    
-    <!-- 其他內容 -->
+  </div>
+<!-- prettier-ignore -->   
+    <!-- 最新服務 -->
     <div class="p-4">
       <div class="flex items-center mb-3">
         <img class="avatarInpage w-7 h-7 rounded-full border border-gray-300 shadow-sm transition duration-300 hover:scale-110" src="{% if service.freelancer_user.profile.photo %}{{ service.freelancer_user.profile.photo.url }}{% else %}https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp{% endif %}" alt="User Avatar "/>
         <p class="ml-3 text-sm font-semibold text-gray-700">{{ service.freelancer_user.username }}</p>
       </div>
-      <p class="text-gray-800 font-medium truncate" title="{{ service.title }}">
-        {{ service.title }}
-      </p>
+      <p class="text-gray-800 font-medium truncate" title="{{ service.title }}">{{ service.title }}</p>
       <div class="flex items-center mt-2">
         {% if service.average_rating %}
         <p class="text-lg text-gray-500">⭐ {{ service.average_rating|floatformat:1 }}</p>
-    {% else %}
+      {% else %}
         <p class="text-lg text-gray-500">⭐ 0.0 </p>
-    {% endif %}
+      {% endif %}
       </div>
-      <p class="text-sm font-semibold text-gray-800">
-        費用 $<span class="text-lg"> {{service.standard_price}} </span>起
-      </p>
+        <p class="text-sm font-semibold text-gray-800">費用 $<span class="text-lg"> {{service.standard_price}} </span>起</p>
+      </div>
     </div>
-  </div>
 </a>
