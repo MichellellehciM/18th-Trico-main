@@ -102,6 +102,8 @@ def file_upload_view(request):
         file_url = default_storage.url(browse_path)
         print(f"Generated file URL: {file_url}")  # 打印 URL
 
+        # 返回處理後的檔案 URL
+        file_url = default_storage.url(browse_path)
 
         return JsonResponse(
             {
