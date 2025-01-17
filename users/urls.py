@@ -15,6 +15,7 @@ from .views import (
     mark_as_read_and_redirect,
     freelancer_financial,
     likes_view,
+    purchased_services,
 )
 
 app_name = "users"
