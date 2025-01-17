@@ -6,6 +6,9 @@ import os
 from django.views.decorators.csrf import csrf_exempt
 
 
+
+
+
 def process_file_for_browse(original_file_path, processed_file_path):
     """
     處理檔案（如生成縮圖），並存儲到指定路徑
@@ -66,16 +69,20 @@ def file_browse_view(request):
 
 
 def process_file_to_browse_s3(original_file_path, output_path):
-    """
-    從 upload 處理檔案並上傳到 browse 資料夾
-    """
-    with default_storage.open(original_file_path, "rb") as original_file:
-        with Image.open(original_file) as img:
-            # 縮圖大小
-            img.thumbnail((300, 300))
-            # 將處理後的圖片存到 browse 資料夾
-            with default_storage.open(output_path, "wb") as output_file:
-                img.save(output_file, format=img.format)
+    try:
+        """
+        從 upload 處理檔案並上傳到 browse 資料夾
+        """
+        with default_storage.open(original_file_path, "rb") as original_file:
+            with Image.open(original_file) as img:
+                # 縮圖大小
+                img.thumbnail((300, 300))
+                # 將處理後的圖片存到 browse 資料夾
+                with default_storage.open(output_path, "wb") as output_file:
+                    img.save(output_file, format=img.format)
+    except Exception as e:
+        print(f"Error during image processing: {e}")
+        raise
 
 
 @csrf_exempt
@@ -93,6 +100,8 @@ def file_upload_view(request):
 
         # 返回處理後的檔案 URL
         file_url = default_storage.url(browse_path)
+        print(f"Generated file URL: {file_url}")  # 打印 URL
+
 
         return JsonResponse(
             {
@@ -124,3 +133,6 @@ def file_browse_view(request):
         )
 
     return JsonResponse({"files": files})
+
+
+
