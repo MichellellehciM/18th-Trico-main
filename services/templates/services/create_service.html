@@ -1,6 +1,7 @@
-{% extends "shared/layout.html" %} {% block content %} 
+{% extends "shared/layout.html" %} {% block content %}
 {% load static %}
 
+<!-- Loading Screen -->
 <div id="loading-screen" class="hidden fixed inset-0 bg-gray-100 flex flex-col items-center justify-center z-50">
   <div class="flex space-x-3 mb-4">
     <div class="w-6 h-6 rounded-full dot" style="background-color: #ff1dbf;"></div>
@@ -9,108 +10,48 @@
   </div>
   <p class="text-xl font-semibold text-gray-700">LOADING</p>
 </div>
-<div class="bg-white p-3 min-h-screen">
+<!-- Main Content -->
+<div class="bg-white p-6 min-h-screen">
 
   <div id="main-content" class="sm:w-3/5 mx-auto my-8 bg-indigo-200 p-6 rounded-lg shadow-md" data-page="toggling_plan">
-
-    <h1 class="text-3xl font-bold text-gray-700 text-center mb-6">
-      <strong>新增服務</strong>
-    </h1>
+    <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">編輯服務</h1>
     <form method="post" enctype="multipart/form-data" class="space-y-10" onsubmit="showLoadingScreen(event)">
       {% csrf_token %}
 
       <!-- Title Field -->
       <div class="flex flex-col space-y-2">
-        <div class="flex items-center">
-          <label for="title" class="text-gray-700 font-medium">
-            <strong>服務項目：</strong>
-          </label>
-          <span class="text-red-500 text-sm ml-1">*必填</span>
-        </div>
+        <label for="title" class="text-gray-700 font-medium">服務項目：</label>
         <input
           type="text"
           id="title"
           name="title"
-          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-5/5"
-          placeholder="<範例> 我會透過我的專業幫你剪輯影片並配上字幕..."
+          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
+          placeholder="範例: 我會透過我的專業幫你剪輯影片並配上字幕..."
           value="{{ form.title.value|default_if_none:'' }}"
         />
         {% if form.title.errors %}
         <p class="text-red-500 text-sm">*請填寫您的服務項目名稱</p>
         {% endif %}
       </div>
-      
 
       <!-- Description Field -->
-      <div class="flex flex-col space-y-2 relative">
-
-        <div class="flex items-center">
-          <label for="description" class="text-gray-700 font-medium">
-          <strong>描述：</strong><span class="text-red-500 text-sm ml-1">*必填</span>
-            <button
-              id="view-example-btn"
-              type="button"
-              class="text-blue-600 hover:text-blue-800 underline">
-              點我看範例
-            </button>
-          </label>
-        </div>
-
-        <!-- View Example Button -->
-
-        <div class="flex items-center">
-          <!-- Textarea -->
-          <textarea
-              id="id_description"
-              name="description"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
-              placeholder=""
-          >{{ form.description.value|default_if_none:'' }}</textarea>
-
-
-        </div>
-
-        <!-- Example Modal -->
-        <div
-            id="example-modal"
-            class="hidden absolute top-12 left-0 bg-white border border-gray-300 rounded-md p-4 w-full z-10 shadow-md">
-          <div class="flex justify-between items-center">
-              <button id="close-example-btn" type="button" class="text-gray-500 text-4xl hover:text-gray-800 p-2" >  
-                &times; 
-              </button>
-             <div class="text-white-700 font-medium"> 
-                <p><範例></p> 
-                <p>我是 Alex Chen，畢業於XX大學，擁有 5 年的影片後製與字幕設計經驗。</p><br>
-                <p>我曾在知名數位行銷公司 XXXX擔任影片製作專員，專注於廣告影片剪輯與社群媒體內容製作，並為品牌如 XYZ Electronics 和ABC Life 提供高效的影片後製服務。</p><br>
-                我擅長剪輯節奏掌控、字幕翻譯與本地化設計，以及創意視覺特效，可以幫您的影片吸引更多流量 </p>
-                <p>無論是商業廣告、YouTube 內容、教育課程，或是活動紀錄影片，我都能根據您的需求量身打造專屬作品。</p>
-                <p>以下是我過去與客戶合作的作品，歡迎與我聊聊~  </p>
-              </div>
-
-          </div>
-
+      <div class="flex flex-col space-y-2">
+        <label for="description" class="text-gray-700 font-medium">描述：</label>
+        <textarea
+          id="id_description"
+          name="description"
+          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
+          placeholder="請以文字描述您擅長的技能"
+        >{{ form.description.value|default_if_none:'' }}</textarea>
+        {% if form.description.errors %}
+        <p class="text-red-500 text-sm">*請描述您的服務內容</p>
+        {% endif %}
       </div>
-
-    {% if form.description.errors %}
-      <p class="text-red-500 text-sm">*請描述您的服務內容</p>
-    {% endif %}
-  </div>
-
-      
 
       <!-- Category Field -->
       <div class="flex flex-col space-y-2">
-        <div class="flex items-center">
-          <label for="category" class="text-gray-700 font-medium">
-            <strong>
-              分類：(可複選)
-            </strong>
-          </label>
-          <span class="text-red-500 text-sm ml-1">*必填</span>
-        </div>
-
-
-        <div class="flex flex-wrap gap-5 sm:gap-y-4">
+        <label for="category" class="text-gray-700 font-medium">分類：</label>
+        <div class="flex flex-wrap gap-2">
           {% for category in categories %}
           <label class="cursor-pointer">
             <input
@@ -118,34 +59,25 @@
               name="category"
               value="{{ category.id }}"
               class="hidden peer"
-              {% if category.id in selected_categories %}
-              checked
-              {% endif %}
+              {% if category in form.instance.category.all %}checked{% endif %}
             />
             <span
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-blue-600 peer-checked:text-white"
+              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-indigo-500 peer-checked:text-white"
               >{{ category.name }}</span
             >
           </label>
           {% endfor %}
-        </div> 
+        </div>
         {% if form.category.errors %}
         <p class="text-red-500 text-sm">*請選擇您的服務分類(可複選)</p>
         {% endif %}
       </div>
 
       <!-- Tags Field -->
-      <div x-data="{ tags: [], newTag: '' }" class="flex flex-col space-y-2 mt-4">
-        <div class="flex items-center">
-          <label for="tags" class="text-gray-700 font-medium">
-            <strong>
-              標籤：
-            </strong>
-          </label>
-          <span class="text-red-500 text-sm ml-1">*必填 (輸入完按下 Enter) </span>
-        </div>
-    
-        <!-- 輸入標籤的欄位 -->
+      <div x-data="{ tags: {{ tags|safe|default:'[]' }}, newTag: '' }" class="flex flex-col space-y-2 mt-4">
+        <label for="tags" class="text-gray-700 font-medium">標籤：</label>
+
+        <!-- ✅ 標籤輸入欄位 -->
         <input
             type="text"
             x-model="newTag"
@@ -155,200 +87,167 @@
                     newTag = '';
                 }
             "
-            placeholder="<範例> 影片剪輯 | 字幕設計"
+            placeholder="輸入標籤並按 Enter"
             class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
         />
-    
-        <!-- 已輸入的標籤顯示 -->
-         
+
+        <!-- ✅ 已輸入的標籤顯示 -->
         <div class="flex flex-wrap gap-2 mt-2">
             <template x-for="(tag, index) in tags" :key="index">
-              <div class="flex items-center bg-indigo-500 text-white text-sm px-3 py-1 rounded-full">
-                <span x-text="tag"></span>
-                <button
-                    type="button"
-                    @click="tags.splice(index, 1)"
-                    class="ml-2 py-1 text-white hover:text-red-300 focus:outline-none">
-                    X
-                </button>
-              </div>
+                <div class="flex items-center bg-indigo-500 text-white text-sm px-3 py-1 rounded-full">
+                    <span x-text="tag"></span>
+                    <button
+                        type="button"
+                        @click="tags.splice(index, 1)"
+                        class="ml-2 py-1 text-white hover:text-red-300 focus:outline-none">
+                        X
+                    </button>
+                </div>
             </template>
         </div>
-    
-        <!-- 隱藏的標籤輸出，用於送出到 Django -->
-        <input type="hidden" name="tags" :value="tags.join(',')" />
-    </div>
-    
+
+        <!-- ✅ 隱藏的 input 用於 Django 表單提交 -->
+        <input type="hidden" name="tags" :value="tags.join(',')">
+      </div>
 
       <!-- Photo Upload Field -->
       <div class="flex flex-col space-y-2">
-        <div class="flex items-center">
-          <label for="photo" class="text-gray-700 font-medium">
-            <strong>
-              封面圖片：(上傳一張吸引人的封面圖片，讓使用者對您更感興趣) 
-            </strong>
-          </label>
-          <span class="text-red-500 text-sm ml-1">*必填</span>
-        </div>
+        <label for="photo" class="text-gray-700 font-medium">作品圖片</label>
         <input
           type="file"
           id="photo"
           name="photo"
-          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-5/5"
+          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
         />
         {% if form.photo.errors %}
-        <p class="text-red-500 text-sm">{{ form.photo.errors }}</p>
+        <p class="text-red-500 text-sm">*請上傳正確圖片格式</p>
         {% endif %}
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 justify-center gap-4">
-
-        <!-- Standard Plan Fields -->
-        <div class="pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-full sm:space-y-2">
-          <div class="flex items-center">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2>
-            <span class="text-red-500 text-sm ml-1 mb-4">*必填 </span>
-          </div>
-
-
-          <div class="flex flex-col space-y-2">
-            <label for="standard_title" class="text-gray-700 font-medium"
-              >名稱：</label
-            >
-            <input
-              type="text"
-              id="standard_title"
-              name="standard_title"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="<範例> 基本影片剪輯與字幕配對服務"
-              value="{{ form.standard_title.value|default_if_none:'' }}"
-            />
-            {% if form.standard_title.errors %}
-            <p class="text-red-500 text-sm">*請填寫一般方案名稱</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="standard_description" class="text-gray-700 font-medium"
-              >描述：</label
-            >
-            <textarea
-              id="standard_description"
-              name="standard_description"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-              placeholder="<範例> 提供簡單高效的影片剪輯與字幕添加服務，適合個人紀錄、簡單影片或社群媒體短片，確保畫面流暢並準確傳遞您的訊息..."
-            >{{ form.standard_description.value|default_if_none:'' }}</textarea>
-            {% if form.standard_description.errors %}
-            <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="standard_price" class="text-gray-700 font-medium"
-              >價格：</label
-            >
-            <input
-              type="number"
-              id="standard_price"
-              name="standard_price"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="一般方案價格(金額需大於0)"
-              value="{{ form.standard_price.value|default_if_none:'' }}"
-            />
-            {% if form.standard_price.errors %}
-            <p class="text-red-500 text-sm">*金額需大於0</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="standard_delivery_time" class="text-gray-700 font-medium"
-              >交付時間 (天)：</label
-            >
-            <input
-              type="number"
-              id="standard_delivery_time"
-              name="standard_delivery_time"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="交付時間"
-              value="{{ form.standard_delivery_time.value|default_if_none:'' }}"
-            />
-            {% if form.standard_delivery_time.errors %}
-            <p class="text-red-500 text-sm">*請填寫交付時間</p>
-            {% endif %}
-          </div>
-        </div>
-
-        <!-- Premium Plan Fields -->
-        <div
-          class="pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-full sm:space-y-2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
-          id="premium-plan-container"
-        >
-        
-          <h2 class="text-lg font-semibold text-gray-700 mb-4">專業方案 (選填)</h2>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_title" class="text-gray-700 font-medium"
-              >名稱：</label
-            >
-            <input
-              type="text"
-              name="premium_title"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="<範例> 專業影片製作與高級字幕設計"
-              value="{{ form.premium_title.value|default_if_none:'' }}"
-            />
-            {% if form.premium_title.errors %}
-            <p class="text-red-500 text-sm">*請填寫專業方案名稱</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_description" class="text-gray-700 font-medium"
-              >描述：</label
-            >
-            <textarea
-              name="premium_description"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-              placeholder="<範例> 提供全面的影片剪輯、特效處理以及精緻字幕設計服務，專為商業廣告、品牌推廣與高要求影片打造，提升內容的專業感與視覺吸引力..."
-            >{{ form.premium_description.value|default_if_none:'' }}</textarea>
-            {% if form.premium_description.errors %}
-            <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_price" class="text-gray-700 font-medium"
-              >價格：</label
-            >
-            <input
-              type="number"
-              name="premium_price"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="專業方案價格"
-              value="{{ form.premium_price.value|default_if_none:'' }}"
-            />
-            {% if form.premium_price.errors %}
-            <p class="text-red-500 text-sm">*金額需大於0</p>
-            {% endif %}
-          </div>
-          <div class="flex flex-col space-y-2">
-            <label for="premium_delivery_time" class="text-gray-700 font-medium"
-              >交付時間 (天)：</label
-            >
-            <input
-              type="number"
-              name="premium_delivery_time"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="交付時間"
-              value="{{ form.premium_delivery_time.value|default_if_none:'' }}"
-            />
-            {% if form.premium_delivery_time.errors %}
-            <p class="text-red-500 text-sm">*請填寫交付時間</p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
+      <div class="flex">
+        <!-- Standard Plan Fields --> 
+        <div class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 space-y-2"> 
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_title" class="text-gray-700 font-medium">名稱：</label> 
+          <input 
+            type="text" 
+            id="standard_title" 
+            name="standard_title" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="一般方案名稱" 
+            value="{{ form.standard_title.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_title.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案名稱</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_description" class="text-gray-700 font-medium">描述：</label> 
+          <textarea 
+            id="standard_description" 
+            name="standard_description" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20" 
+            placeholder="一般方案描述" 
+          >{{ form.standard_description.value|default_if_none:'' }}</textarea> 
+          {% if form.standard_description.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_price" class="text-gray-700 font-medium">價格：</label> 
+          <input 
+            type="number" 
+            id="standard_price" 
+            name="standard_price" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="一般方案價格" 
+            value="{{ form.standard_price.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_price.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案價格</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label> 
+          <input 
+            type="number" 
+            id="standard_delivery_time" 
+            name="standard_delivery_time" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="交付時間" 
+            value="{{ form.standard_delivery_time.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_delivery_time.errors %}
+          <p class="text-red-500 text-sm">*請填寫交付時間</p>
+          {% endif %}
+        </div> 
+      </div> 
+  
+  
+  
+      <!-- Premium Plan Fields --> 
+      <div class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2  {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2" id="premium-plan-container"> 
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">專業方案</h2> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_title" class="text-gray-700 font-medium">名稱：</label> 
+          <input 
+            type="text" 
+            name="premium_title" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="專業方案名稱" 
+            value="{{ form.premium_title.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_title.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案名稱</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_description" class="text-gray-700 font-medium">描述：</label> 
+          <textarea 
+            name="premium_description" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20" 
+            placeholder="專業方案描述">{{ form.premium_description.value|default_if_none:'' }}</textarea> 
+          {% if form.premium_description.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_price" class="text-gray-700 font-medium">價格：</label> 
+          <input 
+            type="number" 
+            name="premium_price" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="專業方案價格" 
+            value="{{ form.premium_price.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_price.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案價格</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label> 
+          <input 
+            type="number" 
+            name="premium_delivery_time" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="交付時間" 
+            value="{{ form.premium_delivery_time.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_delivery_time.errors %}
+          <p class="text-red-500 text-sm">*請填寫交付時間</p>
+          {% endif %}
+        </div> 
+      </div> 
+    </div> 
     <!-- Button to Add/Remove Premium Plan --> 
     <div class="flex justify-start mt-6 space-x-4"> 
       <button 
@@ -359,24 +258,20 @@
     <div class="flex justify-end mt-6 space-x-4"> 
       <a 
         href="{% url 'services:freelancer_dashboard' id=request.user.id %}" 
-        class="bg-gray-500 hover:bg-gray-600 text-white font-bold font-semibold py-2 px-4 rounded-lg focus:outline-nonen"> 
-        取消新增 
+        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"> 
+        取消編輯 
       </a> 
       <button 
         type="submit" 
-        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none">存檔 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none">
+
+        更新 
       </button> 
     </div> 
   </form> 
   </div> 
+
 </div>
-<script>
-  function showLoadingScreen() {
-    // 顯示 Loading 畫面，隱藏主內容
-    document.getElementById('loading-screen').classList.remove('hidden');
-    document.getElementById('main-content').classList.add('hidden');
-  }
-</script>
 
 
 {% load static %}
@@ -384,9 +279,7 @@
 <script src="{% static 'django_ckeditor_5/dist/translations/zh.js' %}"></script>
 <script src="{% static 'django_ckeditor_5/src/ckeditor.js' %}"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
-<script src="https://cdn.ckbox.io/ckbox/2.4.0/ckbox.js"></script>
 
-<!-- 初始化CKEditor -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const targetElement = document.querySelector('#id_description');
@@ -465,25 +358,16 @@ function getCookie(name) {
 
 </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const exampleModal = document.getElementById("example-modal");
-    const viewExampleBtn = document.getElementById("view-example-btn");
-    const closeExampleBtn = document.getElementById("close-example-btn");
-  
-    // 點擊「看範例」按鈕顯示範例內容
-    viewExampleBtn.addEventListener("click", () => {
-      exampleModal.classList.remove("hidden");
-    });
-  
-    // 點擊「關閉」按鈕隱藏範例內容
-    closeExampleBtn.addEventListener("click", () => {
-      exampleModal.classList.add("hidden");
-    });
-  });
-  
-</script>
+
 <link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+
+<script>
+  function showLoadingScreen() {
+    // 顯示 Loading 畫面，隱藏主內容
+    document.getElementById('loading-screen').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('hidden');
+  }
+</script>
 
 <style>
   /* 跳動動畫 */
