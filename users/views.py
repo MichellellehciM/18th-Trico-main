@@ -309,3 +309,19 @@ def freelancer_financial(request):
         "users/freelancer_financial.html",
         {"orders": orders, "total_income": total_income},
     )
+
+
+@login_required
+def purchased_services(request):
+    user = request.user
+    orders = Order.objects.filter(client_user=user).order_by("-order_date")
+
+    status = request.GET.get("status")
+    if status:
+        orders = orders.filter(status=status)
+
+    return render(
+        request,
+        "users/purchased_services.html",
+        {"orders": orders},
+    )

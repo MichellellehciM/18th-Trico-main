@@ -1,0 +1,94 @@
+{% extends "shared/layout.html" %}
+{% block content %}
+<div class="min-h-screen p-6 bg-gray-100">
+  <h1 class="mb-6 text-2xl font-bold text-center text-gray-800">購買的服務</h1>
+
+  <!-- 篩選條件表單 -->
+  <form method="get" class="mb-6">
+    <label for="status" class="mr-2 text-sm font-medium text-gray-700">篩選狀態：</label>
+    <select name="status" id="status" class="px-4 py-2 border rounded-md">
+      <option value="">全部</option>
+      <option value="paid" {% if request.GET.status == 'paid' %}selected{% endif %}>已付款</option>
+      <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>已完成</option>
+      <option value="cancelled" {% if request.GET.status == 'cancelled' %}selected{% endif %}>已取消</option>
+    </select>
+    <button type="submit" class="px-4 py-2 ml-4 text-white bg-blue-500 rounded-md">篩選</button>
+  </form>
+
+  <!-- 訂單列表 -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table class="min-w-full border border-collapse border-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-sm font-medium text-left text-gray-600 border-b">訂單日期</th>
+          <th class="px-6 py-3 text-sm font-medium text-left text-gray-600 border-b">服務名稱</th>
+          <th class="px-6 py-3 text-sm font-medium text-left text-gray-600 border-b">服務提供者</th>
+          <th class="px-6 py-3 text-sm font-medium text-left text-gray-600 border-b">總金額</th>
+          <th class="px-6 py-3 text-sm font-medium text-left text-gray-600 border-b">狀態</th> 
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 text-sm text-gray-700 border-b">
+            {{ order.order_date|date:"Y-m-d H:i" }}
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-700 border-b">
+            {{ order.service.title }}
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-700 border-b">
+            {{ order.service.freelancer_user.username }} <!-- B 的使用者名稱 -->
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-700 border-b">
+            ${{ order.total_price }}
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-700 border-b">
+            {% if order.status == 'paid' %}
+              已付款
+            {% elif order.status == 'completed' %}
+              已完成
+            {% elif order.status == 'cancelled' %}
+              已取消
+            {% else %}
+              未付款
+            {% endif %}
+          </td> 
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="px-6 py-4 text-sm text-center text-gray-500 border-b">
+            您尚未購買任何服務。
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 分頁導航 -->
+  <div class="mt-4">
+    <div class="flex justify-center">
+      <div class="inline-flex items-center -space-x-px">
+        {% if orders.has_previous %}
+        <a href="?page={{ orders.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
+           class="px-3 py-2 text-sm bg-gray-200 border rounded-l-md hover:bg-gray-300">
+          上一頁
+        </a>
+        {% endif %}
+        {% for page_num in orders.paginator.page_range %}
+        <a href="?page={{ page_num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
+           class="px-3 py-2 text-sm bg-gray-200 border hover:bg-gray-300 {% if orders.number == page_num %}font-bold bg-gray-300{% endif %}">
+          {{ page_num }}
+        </a>
+        {% endfor %}
+        {% if orders.has_next %}
+        <a href="?page={{ orders.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
+           class="px-3 py-2 text-sm bg-gray-200 border rounded-r-md hover:bg-gray-300">
+          下一頁
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
