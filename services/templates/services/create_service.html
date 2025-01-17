@@ -200,16 +200,15 @@
         <p class="text-red-500 text-sm">{{ form.photo.errors }}</p>
         {% endif %}
       </div>
-      <div class="flex space-x-4">
+
+      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 justify-center gap-4">
+
         <!-- Standard Plan Fields -->
-        <div class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 space-y-2">
+        <div class="pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-full sm:space-y-2">
           <div class="flex items-center">
             <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2>
             <span class="text-red-500 text-sm ml-1 mb-4">*必填 </span>
           </div>
-
-          
-
 
 
           <div class="flex flex-col space-y-2">
@@ -281,7 +280,7 @@
 
         <!-- Premium Plan Fields -->
         <div
-          class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
+          class="pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-full sm:space-y-2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
           id="premium-plan-container"
         >
         
