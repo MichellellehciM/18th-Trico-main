@@ -14,5 +14,6 @@ class Profile(WebPImageModelMixin,models.Model):
     is_freelancer = models.BooleanField(default=False, null=True)
     freelancer_verified = models.BooleanField(default=False, null=True)
 
+
     def __str__(self):
         return f"{self.user.username}'s Profile"

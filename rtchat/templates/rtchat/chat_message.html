@@ -1,0 +1,65 @@
+{% if message.author == user %}
+<!-- Freelancer 發的消息 -->
+<li class="flex justify-end mb-4">
+  <div class="flex items-end">
+    <!-- 時間 -->
+    <span class="text-sm text-gray-400 mr-2 self-end">{{ message.created|date:"H:i" }}</span>
+
+    <!-- 對話氣泡 -->
+    <div class="bg-green-200 rounded-l-lg rounded-tr-lg p-4 max-w-[75%]">
+      <span>{{ message.body }}</span>
+    </div>
+
+    <!-- 氣泡小尾巴 -->
+    <div class="flex items-end">
+      <svg height="13" width="8">
+        <path fill="#bbf7d0"
+              d="M6.3,10.4C1.5,8.7,0.9,5.5,0,0.2L0,13l5.2,0C7,13,9.6,11.5,6.3,10.4z"/>
+      </svg>
+    </div>
+  </div>
+</li>
+
+{% else %}
+
+<!-- Client 發的消息 -->
+<!-- Client 頭像 -->
+<!-- 點選大頭貼跳轉到 users:information -->
+ 
+<li>
+    <div class="flex items-end">
+        <div class="flex items-end mr-2" >
+            <div>
+                {% if other_user.profile.photo %}
+                <img class="w-9 h-9 rounded-full object-cover" 
+                        src="{{ other_user.profile.photo.url }}"/>
+                {% else %}
+                <!-- 預設頭像 -->
+                <img class="w-9 h-9 rounded-full object-cover" 
+                        src="https://www.shutterstock.com/image-vector/profile-default-avatar-icon-user-600nw-2463844171.jpg"/>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="flex items-end" >
+            <svg height="13" width="8" >
+                <path fill="white" d="M2.8,13L8,13L8,0.2C7.1,5.5,6.5,8.7,1.7,10.4C-1.6,11.5,1,13,2.8,13z"></path>
+            </svg>
+            
+        </div>
+        <div class="bg-white p-4 max-w-[75%] rounded-r-lg rounded-tl-lg">
+            <span>{{message.body}}</span>
+        </div>  
+        <span class="ml-2 text-sm text-gray-400">{{ message.created|date:"H:i" }}</span>
+
+    </div>
+
+
+
+</li>
+
+
+
+
+{% endif %}

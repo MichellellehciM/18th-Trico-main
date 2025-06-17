@@ -1,3 +1,12 @@
+# 此專案是 fork https://github.com/astrocamp/18th-Trico 並持續開發的版本
+2025/06/18 新增
+1. UI & Chat Enhancement
+   - Red dot indicator for unread chat messages
+   - Auto-clear red dot when opening chat
+   - UI style enhancements for navbar and badges
+   - HTMX integration for auto-refreshing message status
+
+
 # TriCo
 
 TriCo 是一個專注於服務媒合的網站，讓使用者可以輕鬆購買或販售他人提供的專業服務，實現高效的資源交換與即時互動。

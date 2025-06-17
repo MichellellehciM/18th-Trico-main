@@ -1,0 +1,57 @@
+{% extends "shared/layout.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{ profile_user.username }} 的個人頁面</h1>
+
+<div class="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
+
+    <!-- 使用者頭像 -->
+    <div class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mb-6">
+        {% if profile_user.profile.photo %}
+            <img src="{{ profile_user.profile.photo.url }}" 
+                alt="{{ profile_user.username }}" 
+                class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+        {% else %}
+            <img src="https://www.shutterstock.com/image-vector/profile-default-avatar-icon-user-600nw-2463844171.jpg" 
+                alt="{{ profile_user.username }}" 
+                class="w-full h-auto rounded-full border-4 border-gray-600 object-cover shadow-md" />
+        {% endif %}
+    </div>
+
+    <!-- 使用者名稱 -->
+    <div class="text-center">
+        <div class="text-2xl font-bold text-gray-100 mb-1">{{ profile_user.username }}</div>
+
+        <!-- 顯示個人資訊 -->
+        {% if profile_user.profile.bio %}
+            <div class="text-gray-300 mt-4 px-4 py-2 bg-gray-800 rounded-lg shadow-lg">
+                {{ profile_user.profile.bio|linebreaksbr }}
+            </div>
+        {% else %}
+            <div class="text-red-500 m-4">尚未填寫個人簡介</div>
+        {% endif %}
+
+        <!-- 聊天按鈕：登入者點到別人的頁面才出現 -->
+        {% if profile_user != user %}
+        <div class="mt-6 p-4">
+            <a href="{% url 'start-chat' profile_user.username %}" 
+               class="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" 
+                          d="M21.75 7.5l-5.34-2.67a2.25 2.25 0 00-2.01 0L9.06 7.5m7.69-3.86
+                             a6.75 6.75 0 10-6.5 11.8v2.31a.75.75 
+                             0 001.24.58l3.5-2.8a.75.75 
+                             0 01.95-.02l3.5 2.8a.75.75 
+                             0 001.24-.58v-2.31a6.751 
+                             6.751 0 00.12-10.8z" />
+                </svg>
+                和我聊聊~
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

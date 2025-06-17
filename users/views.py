@@ -21,6 +21,7 @@ from notification.models import Notification
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.auth.models import User 
 
 
 def register(request):
@@ -214,27 +215,7 @@ def switch_role(request):
     return redirect("users:user_dashboard")
 
 
-@login_required
-def feedback_view(request):
-    profile = request.user.profile
-    if profile.is_freelancer:
-        comments_received = Comment.objects.filter(
-            service__freelancer_user=request.user, is_deleted=False
-        ).select_related("user", "service")
-        context = {
-            "comments_received": comments_received,
-            "role": "freelancer",
-        }
-    else:
-        comments_given = Comment.objects.filter(
-            user=request.user, is_deleted=False
-        ).select_related("service", "service__freelancer_user")
-        context = {
-            "comments_given": comments_given,
-            "role": "client",
-        }
 
-    return render(request, "users/feedback.html", context)
 
 
 @login_required
@@ -329,3 +310,21 @@ def purchased_services(request):
         "users/purchased_services.html",
         {"orders": orders},
     )
+
+# 個人首頁
+def information(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    return render(request, "users/information.html", {
+        "profile_user": profile_user,  
+    })
+
+
+def profile_view(request, username=None):
+    if username:
+        profile = get_object_or_404(User, username=username).profile
+    else:
+        try:
+            profile = request.user.profile
+        except:
+            return redirect_to_login(request.get_full_path())
+    return render(request, 'a_users/profile.html', {'profile':profile})

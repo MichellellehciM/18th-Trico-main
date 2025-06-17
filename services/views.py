@@ -217,6 +217,7 @@ def service_detail(request, id, service_id):
         "services/service_detail.html",
         {
             "service": service,
+            "freelancer": service.freelancer_user,
             "comments": comments,
             "comment": comment,
             "form": form,

@@ -30,9 +30,12 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_fsm",
+    "django_htmx",
     "users",
     "pages",
     "order",
@@ -52,6 +56,8 @@ INSTALLED_APPS = [
     "search",
     "notification",
     "taggit",
+    "rtchat",
+
 ]
 INSTALLED_APPS += [
     "django.contrib.sites",
@@ -103,6 +109,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -124,7 +131,24 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+# WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }, 
+}
+
+# # Channels-redis
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": ["redis://:NlNkbecGLMktLYTcIQGNmBpvAFOGLbUp@redis.railway.internal:6379"],
+#         },
+#     },
+# }
 
 
 # Database

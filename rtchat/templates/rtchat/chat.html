@@ -1,0 +1,81 @@
+{% extends "layouts/blank.html" %} 
+
+{% block content %}
+
+<wrapper class="block max-w-2xl mx-auto my-10 px-6">
+  <div id="chat_window" class="h-[45rem] flex flex-col bg-gray-800 rounded-2xl shadow-2xl relative p-1">
+
+    <!-- 聊天視窗頂部 -->
+    <div class="text-emerald-400 bg-gray-800 p-4 sticky top-0 z-10 flex items-center relative">
+      {% if other_user %}
+        <!-- 線上狀態綠點 -->
+        <div id="online-icon" class="gray-dot absolute top-2 left-2"></div>
+
+        <!-- 返回上一頁按鈕 -->
+        <div class="absolute top-1/2 left-12 transform -translate-y-1/2">
+          <a href="javascript:history.back();" 
+             class="text-gray-300 text-lg font-bold hover:text-white">
+            ＜上一頁
+          </a>
+        </div>
+
+        <!-- 頭像與名稱 -->
+        <a href="{% url 'users:information' other_user.username %}" class="mx-auto flex items-center gap-2">
+          {% if other_user.profile.photo %}
+            <img class="w-11 h-11 rounded-full object-cover" 
+                 src="{{ other_user.profile.photo.url }}"
+                 alt="{{ other_user.username }}"/>
+          {% else %}
+            <img class="w-10 h-10 rounded-full object-cover" 
+                 src="https://www.shutterstock.com/image-vector/profile-default-avatar-icon-user-600nw-2463844171.jpg"
+                 alt="{{ other_user.username }}"/>
+          {% endif %}
+          <div>
+            <span class="font-bold text-white">{{ other_user.username }}</span>
+            {% if other_user.profile.displayname %}
+              <span class="text-gray-400">@{{ other_user.profile.displayname }}</span>
+            {% endif %}
+          </div>
+        </a>
+      {% else %}
+        <div id="online-icon"></div>
+        <span id="online-count" class="pr-1"></span>onLine
+      {% endif %}
+    </div>
+
+    <!-- 聊天訊息容器 -->
+    <div id="chat_container" class="overflow-y-auto grow">
+      <ul id="chat_messages" class="flex flex-col justify-end gap-2 p-4">
+        {% for message in chat_messages reversed %}
+          {% include "rtchat/chat_message.html" %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- 輸入框 -->
+    <div class="sticky bottom-0 z-10 p-2 bg-gray-800">
+      <div class="flex items-center rounded-xl px-2 py-2">
+        <form id="chat_message_form" method="POST" class="w-full"
+              hx-ext="ws"
+              ws-connect="/ws/chatroom/{{ chatroom_name }}"
+              ws-send
+              _="on htmx:wsAfterSend reset() me">
+          {% csrf_token %}
+          {{ form }}
+        </form>
+      </div>
+    </div>
+  </div>
+</wrapper>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+  function scrollToBottom() {
+    const container = document.getElementById("chat_container");
+    container.scrollTop = container.scrollHeight;
+  }
+  scrollToBottom();
+</script>
+{% endblock %}

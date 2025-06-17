@@ -16,7 +16,10 @@ from .views import (
     freelancer_financial,
     likes_view,
     purchased_services,
+    information,
 )
+from django.urls import path, re_path
+from rtchat.views import *
 
 app_name = "users"
 
@@ -25,6 +28,9 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
     path("profile/", profile, name="profile"),
+    path("information/<str:username>/", information, name="information"),
+
+
     path("password_reset/", CustomPasswordResetView.as_view(), name="password_reset"),
     path(
         "password_reset_done/",
@@ -54,3 +60,5 @@ urlpatterns = [
     path("likes/", likes_view, name="likes"),
     path("purchased_services/", purchased_services, name="purchased_services"),
 ]
+
+
