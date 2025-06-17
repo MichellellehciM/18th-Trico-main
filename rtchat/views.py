@@ -5,7 +5,13 @@ from .models import ChatGroup
 from .forms import ChatmessageCreateForm
 from django.contrib.auth.models import User
 from urllib.parse import unquote
+from django.http import JsonResponse
+from .models import GroupMessage, MessageReadStatus
 
+
+
+
+from .models import MessageReadStatus
 
 @login_required
 def chat_view(request, chatroom_name="public-chat"):
@@ -21,7 +27,15 @@ def chat_view(request, chatroom_name="public-chat"):
         if not other_user:
             raise Http404("聊天對象並不存在。")
 
-    
+    # 將未讀訊息標記為已讀
+    unread_messages = chat_group.chat_messages.exclude(
+        read_statuses__user=request.user
+    )
+    MessageReadStatus.objects.bulk_create([
+        MessageReadStatus(message=msg, user=request.user, read=True)
+        for msg in unread_messages
+    ], ignore_conflicts=True)
+
     if request.htmx:
         form = ChatmessageCreateForm(request.POST)
         if form.is_valid:
@@ -34,7 +48,7 @@ def chat_view(request, chatroom_name="public-chat"):
                 "user" : request.user,
             }
             return render(request, "rtchat/partials/chat_message_p.html", context)
-    
+
     context = {
         "chat_messages" : chat_messages, 
         "form" : form,
@@ -44,6 +58,7 @@ def chat_view(request, chatroom_name="public-chat"):
     }
     
     return render(request, "rtchat/chat.html", context)
+
 
 
 
@@ -73,3 +88,55 @@ def get_or_create_chatroom(request, username):
 
 
 
+
+
+
+
+def unread_message_count(request):
+    if request.user.is_authenticated:
+        unread = GroupMessage.objects.filter(
+            group__members=request.user
+        ).exclude(
+            read_statuses__user=request.user
+        ).count()
+        return JsonResponse({'unread_count': unread})
+    return JsonResponse({'unread_count': 0})
+
+
+
+
+def unread_message_badge(request):
+    if request.user.is_authenticated:
+        unread_count = GroupMessage.objects.filter(
+            group__members=request.user
+        ).exclude(
+            read_statuses__user=request.user
+        ).count()
+    else:
+        unread_count = 0
+    return render(request, "rtchat/message_dot.html", {"count": unread_count})
+
+
+@login_required
+def unread_chatroom_status(request):
+    user = request.user
+    chatgroups = ChatGroup.objects.filter(members=user, is_private=True).distinct()
+
+    unread_groups = (
+        GroupMessage.objects
+        .filter(group__in=chatgroups)
+        .exclude(read_statuses__user=user)
+        .values_list("group_id", flat=True)
+        .distinct()
+    )
+
+    result = []
+    for group in chatgroups:
+        other_user = group.members.exclude(id=user.id).first()
+        result.append({
+            "group_name": group.group_name,
+            "username": other_user.username if other_user else "未知",
+            "has_unread": group.id in unread_groups
+        })
+    
+    return JsonResponse({"data": result})

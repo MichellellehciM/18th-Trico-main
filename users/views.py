@@ -313,9 +313,10 @@ def purchased_services(request):
 
 # 個人首頁
 def information(request, username):
-    user = get_object_or_404(User, username=username)  
-    return render(request, "users/information.html", {"user": user})
-
+    profile_user = get_object_or_404(User, username=username)
+    return render(request, "users/information.html", {
+        "profile_user": profile_user,  
+    })
 
 
 def profile_view(request, username=None):

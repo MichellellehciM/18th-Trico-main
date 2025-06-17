@@ -23,3 +23,11 @@ class GroupMessage(models.Model):
 
     class Meta:
         ordering = ["-created",]
+
+class MessageReadStatus(models.Model):
+    message = models.ForeignKey(GroupMessage, related_name="read_statuses", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    read = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('message', 'user')
