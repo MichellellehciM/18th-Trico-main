@@ -1,92 +1,85 @@
-{% extends "shared/layout.html" %} 
-{% block content %} 
+{% extends "shared/layout.html" %}
+{% block content %}
 
-<div class="w-4/5  mx-auto my-8 bg-blue-100 p-6 rounded-lg shadow-md" data-page="toggling_buttons">
-  <!-- 按鈕區域 -->
-  <div class="flex justify-between items-center mb-6">
-    <!-- 上一頁 -->
-    <a
-      class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-      href="{% url 'users:user_dashboard' %}">
-    
-      回主控台
-    </a>
-
-    <!-- 右側按鈕區域 -->
-    <div class="flex space-x-4">
-      <!-- 新增服務按鈕 -->
+<div class="bg-indigo-300 p-8 min-h-screen">
+  <div class="container mx-auto  ">
+    <!-- 回主控台按鈕 -->
+    <div class="mb-8">
       <a
-        class="add-service-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        href="{% url 'services:create_service' id=request.user.id %}"
-      >
-        新增服務
+        class="bg-indigo-300 border-4 border-white text-white font-bold py-3 px-6 rounded-full hover:bg-indigo-400"
+        href="{% url 'users:user_dashboard' %}">
+        回主控台
       </a>
-
-      <!-- 管理個人服務按鈕 -->
-      <button
-        id="toggle-management-btn"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        管理個人服務
-      </button>
     </div>
   </div>
-
-  <!-- 卡牌區域 -->
-  <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 container mx-auto">
-    {% if services %}
-      {% for service in services %}
-      <div
-        class="service-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between"
-      >
-        <a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}">
-          <img
-            class="w-full h-48 object-cover"
-            src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
-            alt="Service Photo"
-          />
-        </a>
-        <div class="p-4 flex">
-          <h2 class="text-xl font-bold text-blue-800 truncate">{{ service.title }}</h2>
-        </div>
-        <div class="p-3 text-right">
-          <div class="mt-2 flex-auto space-x-4 justify-end management-buttons hidden">
-            <!-- 編輯按鈕 -->
-            <a
-              class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded transition duration-300"
-              href="{% url 'services:edit_service' id=request.user.id service_id=service.id %}"
-            >
-              編輯
-            </a>
-            <!-- 刪除按鈕 -->
-            <a
-              class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded transition duration-300"
-              href="{% url 'services:delete_service' id=request.user.id service_id=service.id  %}"
-            >
-              刪除
-            </a>
-          </div>
-        </div>
   
-        <div class="relative flex flex-col text-white text-[9px] font-medium font-mono overflow-hidden w-full bg-gray-800 rounded-lg shadow-lg">
-  <!-- 上方標籤 -->
-  <div class="w-full flex justify-between items-center px-3 py-1 bg-gray-700 border-b border-gray-600">
-    <span class="uppercase truncate">建立日期</span>
-    <span class="whitespace-nowrap">{{ service.created_at|date:"Y/m/d H:i" }}</span>
-  </div>
-  <!-- 下方標籤 -->
-  <div class="w-full flex justify-between items-center px-3 py-1 bg-gray-700 rounded-b-lg">
-    <span class="uppercase truncate">最近修改日期</span>
-    <span class="whitespace-nowrap">{{ service.updated_at|date:"Y/m/d H:i" }}</span>
-  </div>
-</div>
+    <div class="w-4/5 mx-auto bg-indigo-50 p-6 rounded-lg shadow-md" data-page="toggling_buttons">
+      <!-- 按鈕區域 -->
+      <div class="flex justify-end items-center mb-6">
+        <!-- 右側按鈕區域 -->
+        <div class="flex space-x-4">
+          <!-- 新增服務按鈕 -->
+          <a
+            class="add-service-btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
+            href="{% url 'services:create_service' id=request.user.id %}"
+          >
+            新增服務
+          </a>
+  
+          <!-- 管理個人服務按鈕 -->
+          <button
+            id="toggle-management-btn"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
+          >
+            管理個人服務
+          </button>
+        </div>
       </div>
-      {% endfor %}
-    {% else %}
-    <p class="text-center text-gray-700">
-      您尚未新增服務哦~ <br>按下新增服務開始你的接案旅程吧~
-    </p>
-    {% endif %}
+  
+      <!-- 卡牌區域 -->
+      <div class="services grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% if services %}
+          {% for service in services %}
+          <div
+            class="service-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between"
+          >
+            <a href="{% url 'services:service_detail' service.freelancer_user.id service.id %}">
+              <img
+                class="w-full h-48 object-cover"
+                src="{% if service.photo %}{{ service.photo.url }}{% else %}https://fakeimg.pl/300{% endif %}"
+                alt="Service Photo"
+              />
+            </a>
+            <div class="p-4 flex">
+              <h2 class="text-xl font-bold text-blue-800 truncate">{{ service.title }}</h2>
+            </div>
+            <div class="p-3 text-right">
+              <div class="mt-2 flex-auto space-x-4 justify-end management-buttons hidden">
+                <!-- 編輯按鈕 -->
+                <a
+                  class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
+                  href="{% url 'services:edit_service' id=request.user.id service_id=service.id %}"
+                >
+                  編輯
+                </a>
+                <!-- 刪除按鈕 -->
+                <a
+                  class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
+                  href="{% url 'services:delete_service' id=request.user.id service_id=service.id %}"
+                >
+                  刪除
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+        <p class="text-center text-gray-700">
+          您尚未新增服務哦~ <br>按下新增服務開始你的接案旅程吧~
+        </p>
+        {% endif %}
+      </div>
+  
   </div>
   
 

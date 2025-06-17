@@ -1,40 +1,21 @@
-{% extends "shared/layout.html" %} {% block content %} {% load static %}
+{% extends "shared/layout.html" %} {% block content %}
+{% load static %}
 
 <!-- Loading Screen -->
-<div
-  id="loading-screen"
-  class="hidden fixed inset-0 bg-gray-100 flex flex-col items-center justify-center z-50"
->
+<div id="loading-screen" class="hidden fixed inset-0 bg-gray-100 flex flex-col items-center justify-center z-50">
   <div class="flex space-x-3 mb-4">
-    <div
-      class="w-6 h-6 rounded-full dot"
-      style="background-color: #ff1dbf"
-    ></div>
-    <div
-      class="w-6 h-6 rounded-full dot"
-      style="background-color: #004fff"
-    ></div>
-    <div
-      class="w-6 h-6 rounded-full dot"
-      style="background-color: #42d3d8"
-    ></div>
+    <div class="w-6 h-6 rounded-full dot" style="background-color: #ff1dbf;"></div>
+    <div class="w-6 h-6 rounded-full dot" style="background-color: #004fff;"></div>
+    <div class="w-6 h-6 rounded-full dot" style="background-color: #42d3d8;"></div>
   </div>
   <p class="text-xl font-semibold text-gray-700">LOADING</p>
 </div>
 <!-- Main Content -->
 <div class="bg-white p-6 min-h-screen">
-  <div
-    id="main-content"
-    class="sm:w-3/5 mx-auto my-8 bg-indigo-200 p-6 rounded-lg shadow-md"
-    data-page="toggling_plan"
-  >
+
+  <div id="main-content" class="sm:w-3/5 mx-auto my-8 bg-indigo-200 p-6 rounded-lg shadow-md" data-page="toggling_plan">
     <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">編輯服務</h1>
-    <form
-      method="post"
-      enctype="multipart/form-data"
-      class="space-y-10"
-      onsubmit="showLoadingScreen(event)"
-    >
+    <form method="post" enctype="multipart/form-data" class="space-y-10" onsubmit="showLoadingScreen(event)">
       {% csrf_token %}
 
       <!-- Title Field -->
@@ -55,17 +36,13 @@
 
       <!-- Description Field -->
       <div class="flex flex-col space-y-2">
-        <label for="description" class="text-gray-700 font-medium"
-          >描述：</label
-        >
+        <label for="description" class="text-gray-700 font-medium">描述：</label>
         <textarea
           id="id_description"
           name="description"
           class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full h-32"
           placeholder="請以文字描述您擅長的技能"
-        >
-{{ form.description.value|default_if_none:'' }}</textarea
-        >
+        >{{ form.description.value|default_if_none:'' }}</textarea>
         {% if form.description.errors %}
         <p class="text-red-500 text-sm">*請描述您的服務內容</p>
         {% endif %}
@@ -82,14 +59,7 @@
               name="category"
               value="{{ category.id }}"
               class="hidden peer"
-              {%
-              if
-              category
-              in
-              form.instance.category.all
-              %}checked{%
-              endif
-              %}
+              {% if category in form.instance.category.all %}checked{% endif %}
             />
             <span
               class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 peer-checked:bg-indigo-500 peer-checked:text-white"
@@ -104,46 +74,40 @@
       </div>
 
       <!-- Tags Field -->
-      <div
-        x-data="{ tags: {{ tags|safe|default:'[]' }}, newTag: '' }"
-        class="flex flex-col space-y-2 mt-4"
-      >
+      <div x-data="{ tags: {{ tags|safe|default:'[]' }}, newTag: '' }" class="flex flex-col space-y-2 mt-4">
         <label for="tags" class="text-gray-700 font-medium">標籤：</label>
 
         <!-- ✅ 標籤輸入欄位 -->
         <input
-          type="text"
-          x-model="newTag"
-          @keydown.enter.prevent="
+            type="text"
+            x-model="newTag"
+            @keydown.enter.prevent="
                 if (newTag.trim() !== '' && !tags.includes(newTag.trim())) {
                     tags.push(newTag.trim());
                     newTag = '';
                 }
             "
-          placeholder="輸入標籤並按 Enter"
-          class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
+            placeholder="輸入標籤並按 Enter"
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 w-full"
         />
 
         <!-- ✅ 已輸入的標籤顯示 -->
         <div class="flex flex-wrap gap-2 mt-2">
-          <template x-for="(tag, index) in tags" :key="index">
-            <div
-              class="flex items-center bg-indigo-500 text-white text-sm px-3 py-1 rounded-full"
-            >
-              <span x-text="tag"></span>
-              <button
-                type="button"
-                @click="tags.splice(index, 1)"
-                class="ml-2 py-1 text-white hover:text-red-300 focus:outline-none"
-              >
-                X
-              </button>
-            </div>
-          </template>
+            <template x-for="(tag, index) in tags" :key="index">
+                <div class="flex items-center bg-indigo-500 text-white text-sm px-3 py-1 rounded-full">
+                    <span x-text="tag"></span>
+                    <button
+                        type="button"
+                        @click="tags.splice(index, 1)"
+                        class="ml-2 py-1 text-white hover:text-red-300 focus:outline-none">
+                        X
+                    </button>
+                </div>
+            </template>
         </div>
 
         <!-- ✅ 隱藏的 input 用於 Django 表單提交 -->
-        <input type="hidden" name="tags" :value="tags.join(',')" />
+        <input type="hidden" name="tags" :value="tags.join(',')">
       </div>
 
       <!-- Photo Upload Field -->
@@ -161,182 +125,154 @@
       </div>
 
       <div class="flex">
-        <!-- Standard Plan Fields -->
-        <div
-          class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 space-y-2"
-        >
-          <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2>
+        <!-- Standard Plan Fields --> 
+        <div class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 space-y-2"> 
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">一般方案</h2> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_title" class="text-gray-700 font-medium">名稱：</label> 
+          <input 
+            type="text" 
+            id="standard_title" 
+            name="standard_title" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="一般方案名稱" 
+            value="{{ form.standard_title.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_title.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案名稱</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_description" class="text-gray-700 font-medium">描述：</label> 
+          <textarea 
+            id="standard_description" 
+            name="standard_description" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20" 
+            placeholder="一般方案描述" 
+          >{{ form.standard_description.value|default_if_none:'' }}</textarea> 
+          {% if form.standard_description.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_price" class="text-gray-700 font-medium">價格：</label> 
+          <input 
+            type="number" 
+            id="standard_price" 
+            name="standard_price" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="一般方案價格" 
+            value="{{ form.standard_price.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_price.errors %}
+          <p class="text-red-500 text-sm">*請填寫一般方案價格</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="standard_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label> 
+          <input 
+            type="number" 
+            id="standard_delivery_time" 
+            name="standard_delivery_time" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="交付時間" 
+            value="{{ form.standard_delivery_time.value|default_if_none:'' }}" 
+          /> 
+          {% if form.standard_delivery_time.errors %}
+          <p class="text-red-500 text-sm">*請填寫交付時間</p>
+          {% endif %}
+        </div> 
+      </div> 
+  
+  
+  
+      <!-- Premium Plan Fields --> 
+      <div class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2  {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2" id="premium-plan-container"> 
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">專業方案</h2> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_title" class="text-gray-700 font-medium">名稱：</label> 
+          <input 
+            type="text" 
+            name="premium_title" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="專業方案名稱" 
+            value="{{ form.premium_title.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_title.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案名稱</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_description" class="text-gray-700 font-medium">描述：</label> 
+          <textarea 
+            name="premium_description" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20" 
+            placeholder="專業方案描述">{{ form.premium_description.value|default_if_none:'' }}</textarea> 
+          {% if form.premium_description.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_price" class="text-gray-700 font-medium">價格：</label> 
+          <input 
+            type="number" 
+            name="premium_price" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="專業方案價格" 
+            value="{{ form.premium_price.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_price.errors %}
+          <p class="text-red-500 text-sm">*請填寫專業方案價格</p>
+          {% endif %}
+        </div> 
+  
+        <div class="flex flex-col space-y-2"> 
+          <label for="premium_delivery_time" class="text-gray-700 font-medium">交付時間 (天)：</label> 
+          <input 
+            type="number" 
+            name="premium_delivery_time" 
+            class="bg-white text-gray-800 border border-gray-300 rounded-md p-2" 
+            placeholder="交付時間" 
+            value="{{ form.premium_delivery_time.value|default_if_none:'' }}"
+          /> 
+          {% if form.premium_delivery_time.errors %}
+          <p class="text-red-500 text-sm">*請填寫交付時間</p>
+          {% endif %}
+        </div> 
+      </div> 
+    </div> 
+    <!-- Button to Add/Remove Premium Plan --> 
+    <div class="flex justify-start mt-6 space-x-4"> 
+      <button 
+        type="button" 
+        id="toggle-premium-plan-btn" 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none">新增專業方案</button> 
+    </div> 
+    <div class="flex justify-end mt-6 space-x-4"> 
+      <a 
+        href="{% url 'services:freelancer_dashboard' id=request.user.id %}" 
+        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"> 
+        取消編輯 
+      </a> 
+      <button 
+        type="submit" 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none">
 
-          <div class="flex flex-col space-y-2">
-            <label for="standard_title" class="text-gray-700 font-medium"
-              >名稱：</label
-            >
-            <input
-              type="text"
-              id="standard_title"
-              name="standard_title"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="一般方案名稱"
-              value="{{ form.standard_title.value|default_if_none:'' }}"
-            />
-            {% if form.standard_title.errors %}
-            <p class="text-red-500 text-sm">*請填寫一般方案名稱</p>
-            {% endif %}
-          </div>
+        更新 
+      </button> 
+    </div> 
+  </form> 
+  </div> 
 
-          <div class="flex flex-col space-y-2">
-            <label for="standard_description" class="text-gray-700 font-medium"
-              >描述：</label
-            >
-            <textarea
-              id="standard_description"
-              name="standard_description"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-              placeholder="一般方案描述"
-            >
-{{ form.standard_description.value|default_if_none:'' }}</textarea
-            >
-            {% if form.standard_description.errors %}
-            <p class="text-red-500 text-sm">*請填寫一般方案描述</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="standard_price" class="text-gray-700 font-medium"
-              >價格：</label
-            >
-            <input
-              type="number"
-              id="standard_price"
-              name="standard_price"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="一般方案價格"
-              value="{{ form.standard_price.value|default_if_none:'' }}"
-            />
-            {% if form.standard_price.errors %}
-            <p class="text-red-500 text-sm">*請填寫一般方案價格</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label
-              for="standard_delivery_time"
-              class="text-gray-700 font-medium"
-              >交付時間 (天)：</label
-            >
-            <input
-              type="number"
-              id="standard_delivery_time"
-              name="standard_delivery_time"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="交付時間"
-              value="{{ form.standard_delivery_time.value|default_if_none:'' }}"
-            />
-            {% if form.standard_delivery_time.errors %}
-            <p class="text-red-500 text-sm">*請填寫交付時間</p>
-            {% endif %}
-          </div>
-        </div>
-
-        <!-- Premium Plan Fields -->
-        <div
-          class="m-2 pt-4 p-4 bg-indigo-100 border border-1 rounded-md w-1/2 {% if form.premium_title.value %}block{% else %}hidden{% endif %} space-y-2"
-          id="premium-plan-container"
-        >
-          <h2 class="text-lg font-semibold text-gray-700 mb-4">專業方案</h2>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_title" class="text-gray-700 font-medium"
-              >名稱：</label
-            >
-            <input
-              type="text"
-              name="premium_title"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="專業方案名稱"
-              value="{{ form.premium_title.value|default_if_none:'' }}"
-            />
-            {% if form.premium_title.errors %}
-            <p class="text-red-500 text-sm">*請填寫專業方案名稱</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_description" class="text-gray-700 font-medium"
-              >描述：</label
-            >
-            <textarea
-              name="premium_description"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2 h-20"
-              placeholder="專業方案描述"
-            >
-{{ form.premium_description.value|default_if_none:'' }}</textarea
-            >
-            {% if form.premium_description.errors %}
-            <p class="text-red-500 text-sm">*請填寫專業方案描述</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_price" class="text-gray-700 font-medium"
-              >價格：</label
-            >
-            <input
-              type="number"
-              name="premium_price"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="專業方案價格"
-              value="{{ form.premium_price.value|default_if_none:'' }}"
-            />
-            {% if form.premium_price.errors %}
-            <p class="text-red-500 text-sm">*請填寫專業方案價格</p>
-            {% endif %}
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <label for="premium_delivery_time" class="text-gray-700 font-medium"
-              >交付時間 (天)：</label
-            >
-            <input
-              type="number"
-              name="premium_delivery_time"
-              class="bg-white text-gray-800 border border-gray-300 rounded-md p-2"
-              placeholder="交付時間"
-              value="{{ form.premium_delivery_time.value|default_if_none:'' }}"
-            />
-            {% if form.premium_delivery_time.errors %}
-            <p class="text-red-500 text-sm">*請填寫交付時間</p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      <!-- Button to Add/Remove Premium Plan -->
-      <div class="flex justify-start mt-6 space-x-4">
-        <button
-          type="button"
-          id="toggle-premium-plan-btn"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
-        >
-          新增專業方案
-        </button>
-      </div>
-      <div class="flex justify-end mt-6 space-x-4">
-        <a
-          href="{% url 'services:freelancer_dashboard' id=request.user.id %}"
-          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-        >
-          取消編輯
-        </a>
-        <button
-          type="submit"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none"
-        >
-          更新
-        </button>
-      </div>
-    </form>
-  </div>
 </div>
+
 
 {% load static %}
 <script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
@@ -346,133 +282,97 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const targetElement = document.querySelector('#id_description')
+    const targetElement = document.querySelector('#id_description');
     if (targetElement) {
-      ClassicEditor.create(targetElement, {
-        ckfinder: {
-          uploadUrl: '/ckeditor5/upload/', // 上傳 URL
-        },
-        toolbar: [
-          'undo',
-          'redo',
-          '|',
-          'fontfamily',
-          'fontsize',
-          'fontColor',
-          'fontBackgroundColor',
-          'bold',
-          'italic',
-          'underline',
-          'strikethrough',
-          'subscript',
-          'superscript',
-          'code',
-          '|',
-          'alignment',
-          '|',
-          'link',
-          'blockQuote',
-          'horizontalLine',
-          'pageBreak',
-          'insertTable',
-          '|',
-          'bulletedList',
-          'numberedList',
-          'todoList',
-          '|',
-          'outdent',
-          'indent',
-          '|',
-          'specialCharacters',
-          'codeBlock',
-          'uploadImage',
-          '|',
-          'styles',
-          'caseChanges',
-        ],
-        language: 'zh',
-        extraPlugins: [
-          function (editor) {
-            editor.plugins.get('FileRepository').createUploadAdapter = (
-              loader
-            ) => {
-              return {
-                upload() {
-                  return loader.file.then(
-                    (file) =>
-                      new Promise((resolve, reject) => {
-                        const data = new FormData()
-                        const csrfToken = getCookie('csrftoken') // 獲取 CSRF token
-                        data.append('upload', file)
-
-                        fetch('/ckeditor5/upload/', {
-                          method: 'POST',
-                          body: data,
-                          headers: {
-                            'X-CSRFToken': csrfToken,
-                          },
-                        })
-                          .then((response) => response.json())
-                          .then((data) =>
-                            resolve({
-                              default: data.url, // 返回的 URL
-                            })
-                          )
-                          .catch((err) => reject(err))
-                      })
-                  )
+        ClassicEditor
+            .create(targetElement, {
+                ckfinder: {
+                    uploadUrl: '/ckeditor5/upload/', // 上傳 URL
                 },
-              }
-            }
-          },
-        ],
-      })
-        .then((editor) => {
-          console.log('CKEditor initialized:', editor)
-        })
-        .catch((error) => {
-          console.error('CKEditor initialization error:', error)
-        })
-    } else {
-      console.error('Target element not found!')
-    }
-  })
+                toolbar: [
+                    'undo', 'redo', '|',
+                    'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                    'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', '|',
+                    'alignment', '|',
+                    'link', 'blockQuote', 'horizontalLine', 'pageBreak', 'insertTable', '|',
+                    'bulletedList', 'numberedList', 'todoList', '|',
+                    'outdent', 'indent', '|',
+                    'specialCharacters', 'codeBlock', 'uploadImage', '|',
+                    'styles', 'caseChanges'
+                ],
+                language: 'zh',
+                extraPlugins: [function (editor) {
+                    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                        return {
+                            upload() {
+                                return loader.file
+                                    .then(file => new Promise((resolve, reject) => {
+                                        const data = new FormData();
+                                        const csrfToken = getCookie('csrftoken'); // 獲取 CSRF token
+                                        data.append('upload', file);
 
-  // 獲取 CSRF token 的函數
-  function getCookie(name) {
-    let cookieValue = null
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';')
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim()
-        if (cookie.substring(0, name.length + 1) === name + '=') {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-          break
-        }
-      }
+                                        fetch('/ckeditor5/upload/', {
+                                            method: 'POST',
+                                            body: data,
+                                            headers: {
+                                                'X-CSRFToken': csrfToken,
+                                            },
+                                        })
+                                            .then(response => response.json())
+                                            .then(data => resolve({
+                                                default: data.url // 返回的 URL
+                                            }))
+                                            .catch(err => reject(err));
+                                    }));
+                            }
+                        };
+                    };
+                }]
+            })
+            .then(editor => {
+                console.log('CKEditor initialized:', editor);
+            })
+            .catch(error => {
+                console.error('CKEditor initialization error:', error);
+            });
+    } else {
+        console.error('Target element not found!');
     }
-    return cookieValue
-  }
+});
+
+// 獲取 CSRF token 的函數
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 </script>
 
-<link
-  rel="stylesheet"
-  href="{% static 'django_ckeditor_5/dist/styles.css' %}"
-/>
+
+<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
 
 <script>
   function showLoadingScreen() {
     // 顯示 Loading 畫面，隱藏主內容
-    document.getElementById('loading-screen').classList.remove('hidden')
-    document.getElementById('main-content').classList.add('hidden')
+    document.getElementById('loading-screen').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('hidden');
   }
 </script>
 
 <style>
   /* 跳動動畫 */
   @keyframes bounce {
-    0%,
-    100% {
+    0%, 100% {
       transform: translateY(0);
     }
     50% {
