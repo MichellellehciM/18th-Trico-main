@@ -98,6 +98,8 @@ def unread_message_count(request):
             group__members=request.user
         ).exclude(
             read_statuses__user=request.user
+        ).exclude(
+            author=request.user
         ).count()
         return JsonResponse({'unread_count': unread})
     return JsonResponse({'unread_count': 0})
@@ -111,6 +113,8 @@ def unread_message_badge(request):
             group__members=request.user
         ).exclude(
             read_statuses__user=request.user
+        ).exclude(
+            author=request.user
         ).count()
     else:
         unread_count = 0
@@ -126,6 +130,7 @@ def unread_chatroom_status(request):
         GroupMessage.objects
         .filter(group__in=chatgroups)
         .exclude(read_statuses__user=user)
+        .exclude(author=user)
         .values_list("group_id", flat=True)
         .distinct()
     )
